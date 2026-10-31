@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 16:9 launcher banner: dusk sky with a floating glass dock. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="320dp" android:height="180dp"
+    android:viewportWidth="320" android:viewportHeight="180">
+    <path android:pathData="M0,0h320v180h-320z">
+        <aapt:attr name="android:fillColor">
+            <gradient android:type="linear" android:startX="0" android:startY="0" android:endX="0" android:endY="180"
+                android:startColor="#FF2B3A67" android:centerColor="#FFC0756B" android:endColor="#FF1E2236" />
+        </aapt:attr>
+    </path>
+    <path android:fillColor="#FF151A2B" android:pathData="M0,130 L70,80 L120,115 L180,62 L250,118 L320,90 L320,180 L0,180Z" />
+    <path android:fillColor="#40FFFFFF" android:strokeColor="#90FFFFFF" android:strokeWidth="1.5"
+        android:pathData="M60,128h200a14,14 0 0 1 14,14v6a14,14 0 0 1 -14,14h-200a14,14 0 0 1 -14,-14v-6a14,14 0 0 1 14,-14z" />
+</vector>
