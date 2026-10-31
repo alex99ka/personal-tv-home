@@ -1,5 +1,6 @@
 # Personal TV Home
-n![Personal TV Home](docs/cover.jpg)
+
+![Personal TV Home](docs/cover.jpg)
 
 A home screen (launcher) for Android TV and Google TV, in a "Scenic Glass" style: a photo wallpaper, a floating glass dock of your apps, a clock, weather, and a glass Settings panel. It's written in Kotlin with Jetpack Compose.
 
