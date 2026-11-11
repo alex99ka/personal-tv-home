@@ -12,8 +12,8 @@ android {
         applicationId = "local.personalhome"
         minSdk = 26
         targetSdk = 34 // TCL Google TV firmware accepts 34; same as the cleanyourtv launcher
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     buildTypes {

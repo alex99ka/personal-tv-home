@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.KeyEvent
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -183,8 +184,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onStart() { super.onStart(); music.start() }
-    override fun onStop() { music.stop(); super.onStop() }
+    override fun onStart() {
+        super.onStart()
+        music.start()
+        // Root's LaunchedEffect won't re-run if playing was already true before onStop cleared the flag.
+        if (music.now?.playing == true) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+    override fun onStop() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        music.stop()
+        super.onStop()
+    }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
@@ -220,6 +230,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Root(a: MainActivity) {
+    LaunchedEffect(a.music.now?.playing) {
+        if (a.music.now?.playing == true) {
+            a.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            a.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
     var rootSize by remember { mutableStateOf(IntSize.Zero) }
     val wallpaper by produceState<Backdrop?>(null, a.prefs.wallpaper, a.prefs.album) {
         val wp = a.prefs.wallpaper

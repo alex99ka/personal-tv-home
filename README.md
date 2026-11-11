@@ -10,7 +10,11 @@ A home screen (launcher) for Android TV and Google TV, in a "Scenic Glass" style
 - **Wallpapers:** built-in stock photos that rotate every 60 seconds, or your own Google Photos shared album (paste the link from your phone; the TV shows a QR code).
 - **Weather:** from wttr.in, located by IP, refreshed every 30 minutes.
 
-> **Quick start:** don't want to do this by hand? Paste [PROMPT.md](PROMPT.md) into Claude Code, Codex or any AI coding assistant that can run commands on your computer, and it will walk you through everything.
+> **Quick start:** don't want to do this by hand? Paste [PROMPT.md](PROMPT.md) into Claude Code, Codex or any AI coding assistant that can run commands on your computer. It checks your TV, explains what ADB is, sets it up with you step by step, and adapts every step to your TV brand and Android version.
+
+### What is ADB, and why do I need it?
+
+ADB (Android Debug Bridge) is Google's free tool that lets a computer send commands to an Android device over your home network. Google TV has no "change home screen" menu, so ADB is the only way to install this launcher and make it your Home. You use it once during setup and then turn it off. It doesn't root the TV or change system files, and everything here can be undone (see *Undo*).
 
 ---
 
@@ -122,6 +126,25 @@ When everything works, go to Developer options on the TV and turn **USB debuggin
 
 ---
 
+## Adapting it to your TV
+
+Every brand ships a slightly different Google TV / Android TV. What changes, and what to do:
+
+| Difference | What to do |
+|---|---|
+| **Menu names** (About, Developer options) | Google TV: *System → About*. Older Android TV / Xiaomi / Philips / Shield: *Device Preferences → About*. |
+| **ADB toggle** | TCL: *USB debugging* also opens network ADB on port 5555. Sony / Philips / Shield: also turn on *Network debugging*. Some Android 11+ devices only have *Wireless debugging*: use `adb pair` (Step 2). |
+| **Which stock launcher takes Home** | Find it: `adb shell cmd package resolve-activity -a android.intent.action.MAIN -c android.intent.category.HOME`. Google TV: `com.google.android.apps.tv.launcherx` · Android TV: `com.google.android.tvlauncher` · Xiaomi PatchWall: `com.mitv.tvhome`. Disable only the one that shows up. |
+| **Apps blocked after reboot (TCL, Xiaomi)** | TCL: `adb shell appops set local.personalhome APP_AUTO_START allow`. Xiaomi: allow *Personal TV Home* under Autostart in the app permissions. |
+| **Remote's Settings button** | On TCL it opens this launcher's panel. Other remotes may open the TV's own quick settings; use the round button at the top right instead. |
+| **Android version** | Needs Android 8+. Check *About → Android version*, or `adb shell getprop ro.build.version.sdk` (26 or higher). |
+| **Install refused** | `INSTALL_FAILED_VERIFICATION_FAILURE`: turn off *Verify apps over USB*. `INSTALL_FAILED_OLDER_SDK`: the TV is too old. |
+| **TV vanishes from ADB** | Many TVs drop Wi-Fi in deep standby. Wake it with the remote and `adb connect` again. |
+
+Something else? Ask your AI assistant (with PROMPT.md) or open an issue with your brand, model and Android version.
+
+---
+
 ## Using it
 
 - **Home:** the dock holds your favourite apps. *All Apps* is at the end.
@@ -143,6 +166,12 @@ adb -s <TV_IP>:5555 uninstall local.personalhome
 ```
 
 The TV goes back to its normal home screen.
+
+---
+
+## Updating
+
+Download the new APK from the latest release and run `adb -s <TV_IP>:5555 install -r personal-tv-home.apk`. Your dock, wallpaper and Stremio sign-in are kept.
 
 ---
 

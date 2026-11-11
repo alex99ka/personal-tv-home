@@ -11,12 +11,15 @@ Ask me for my TV brand and model, and to look in Settings → System → About (
 - Amazon Fire TV: the app installs, but Fire OS won't let you replace the Home screen. Tell me that and ask whether I still want it as a normal app.
 - If you're unsure, ask me to read out what the About screen says ("Android TV OS", the Android version, the build).
 
-## 2. Set up my computer
+## 2. Explain ADB to me first
+Before installing anything, explain in plain words: ADB (Android Debug Bridge) is a free Google tool that lets my computer send commands to the TV over my home Wi-Fi. It's needed because Google TV has no menu for changing the home screen. It doesn't root the TV or change system files, it's only used during setup, I'll turn it off at the end, and everything can be undone. Say what you'll use it for (install one app, make it Home) and what you won't do (delete or change anything else). Ask if I have questions before continuing.
+
+## 2b. Set up my computer
 - Find out my OS. Check whether `adb` is installed (`adb version`). If it isn't, install Android Platform Tools: Windows `winget install Google.PlatformTools` (then open a new terminal or use the full path), Mac `brew install android-platform-tools`, Linux `sudo apt install adb`, or download it from https://developer.android.com/tools/releases/platform-tools.
 - Download the APK from the link above. You don't need to build anything.
 
 ## 3. Walk me through turning on ADB on the TV
-The menu names differ by brand and Android version, so adapt to what I tell you I see:
+The menu names differ by brand and Android version, so adapt to what I tell you I see. The README's "Adapting it to your TV" table lists the per-brand differences (menus, ADB toggle, which launcher to disable, autostart blockers); use it:
 - Unlock Developer options: press OK 7 times on the build entry. On Google TV (TCL, Sony, Hisense, Chromecast, newer Xiaomi) it's Settings → System → About → "Android TV OS build". On older Android TV (Xiaomi PatchWall, Philips, Shield, boxes) it's Settings → Device Preferences → About → "Build". Some brands put About under "Device Preferences" even on Google TV. If it isn't there, ask me what I see and help me find it.
 - Then go to Developer options (under System or Device Preferences): turn on "USB debugging". On TCL that alone opens network ADB. Also turn on "Network debugging" / "ADB debugging" if it exists. If there's only "Wireless debugging" (some newer Google TVs), turn that on and use pairing (below).
 - Turn OFF "Verify apps over USB" if it exists. Otherwise the install fails with INSTALL_FAILED_VERIFICATION_FAILURE.
@@ -35,6 +38,7 @@ adb -s <IP>:5555 shell cmd notification allow_listener local.personalhome/local.
 ```
 - INSTALL_FAILED_VERIFICATION_FAILURE: have me turn off "Verify apps over USB" in Developer options, then retry. Don't try to change verifier settings yourself.
 - If `adb install` hangs, the TV is probably waiting for an on-screen confirmation, so ask me to look. Fallback: `adb push` the APK to /data/local/tmp/ and run `adb shell pm install -r /data/local/tmp/personal-tv-home.apk`.
+- Before installing, check `adb shell getprop ro.build.version.sdk` is 26 or higher (Android 8+). If it's lower, tell me this TV can't run it.
 - TCL only: if the app's background features misbehave after a reboot, run `adb shell appops set local.personalhome APP_AUTO_START allow`.
 
 ## 6. Make it the Home screen

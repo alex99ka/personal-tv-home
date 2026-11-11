@@ -5,3 +5,5 @@ app/build/
 local.properties
 .idea/
 *.iml
+.gradle-home-task/
+personal-tv-home.apk
